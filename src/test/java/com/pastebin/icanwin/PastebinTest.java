@@ -1,13 +1,9 @@
 package com.pastebin.icanwin;
 
-import com.pastebin.icanwin.properties.ConfigProperties;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.concurrent.TimeUnit;
 
 //Открыть https://pastebin.com или аналогичный сервис в любом браузере
@@ -24,32 +20,31 @@ public class PastebinTest {
     @Before
     public void setup() {
 
-        System.setProperty("webdriver.chrome.driver", ConfigProperties.getProperty("chromedriver"));
+        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
         driver = new ChromeDriver();
         homePage = new HomePage(driver);
         driver.manage().window().maximize();
-        driver.get(ConfigProperties.getProperty("website"));
+        driver.get("https://pastebin.com");
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
     }
 
     @Test
     public void checkWebsiteTitle() {
-        Assert.assertTrue(driver.getTitle().equals(ConfigProperties.getProperty("websitetitle")));
+        Assert.assertTrue(driver.getTitle().equals("Pastebin.com - #1 paste tool since 2002!"));
     }
 
     @Test
     public void createNewPaste() {
 
-        homePage.inputCode(ConfigProperties.getProperty("code"));
+        homePage.inputCode("Hello from WebDriver");
         homePage.clickDropdownMenuPasteExpiration();
-        homePage.clickDropDownMenuElement();
-        homePage.inputTitle(ConfigProperties.getProperty("title"));
+        homePage.selectElementFromDropDownMenuPasteExpiration("10 Minutes");
+        homePage.inputPasteName("helloweb");
         homePage.clickButtonCreateNewPaste();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[href=\"/signup\"]")));
+        homePage.waitNotificationOfCreationNewPaste();
 
-        //Assert.assertTrue(driver)  проверяем что есть определенный элемент на странице, который появляется при создании новой пасты.
+        Assert.assertTrue(driver.findElements((By.xpath("//div[@class='notice -success -post-view']"))).size() > 0);
     }
 
     @After

@@ -1,4 +1,4 @@
-package com.pastebin.icanwin;
+package com.pastebin.bringiton;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,18 +8,22 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class HomePage {
+public class PastebinHomePage {
 
     public WebDriver driver;
+    private WebElement elementFromDropDownMenuSyntaxHighlighting;
     private WebElement elementFromDropDownMenuPasteExpiration;
 
-    public HomePage(WebDriver driver) {
+    public PastebinHomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
     }
 
     @FindBy(id = "postform-text")
     private WebElement codeField;
+
+    @FindBy(id = "select2-postform-format-container")
+    private WebElement dropDownMenuSyntaxHighlighting;
 
     @FindBy(id = "select2-postform-expiration-container")
     private WebElement dropDownMenuPasteExpiration;
@@ -38,8 +42,17 @@ public class HomePage {
         pasteNameField.sendKeys(pasteName);
     }
 
+    public void clickDropdownMenuSyntaxHighlighting() {
+        dropDownMenuSyntaxHighlighting.click();
+    }
+
     public void clickDropdownMenuPasteExpiration() {
         dropDownMenuPasteExpiration.click();
+    }
+
+    public void selectElementFromDropDownMenuSyntaxHighlighting(String element) {
+        elementFromDropDownMenuSyntaxHighlighting = driver.findElement(By.xpath("//li[contains (text(),'" +element+ "')]"));
+        elementFromDropDownMenuSyntaxHighlighting.click();
     }
 
     public void selectElementFromDropDownMenuPasteExpiration(String element) {
@@ -52,7 +65,8 @@ public class HomePage {
     }
 
     public void waitNotificationOfCreationNewPaste() {
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='notice -success -post-view']")));
+        new WebDriverWait(driver, 10)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='notice -success -post-view']")));
     }
 
 }
