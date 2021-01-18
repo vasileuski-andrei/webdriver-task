@@ -1,4 +1,4 @@
-package com.google.cloud;
+package com.google.cloud.hurtmeplenty;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,7 +20,7 @@ public class GoogleCloudHomePage {
     @FindBy(xpath = "//input[@name='q']")
     private WebElement searchFieldAndButton;
 
-    @FindBy(xpath = "//div/a[@href=\"https://cloud.google.com/products/calculator\"]")
+    @FindBy(xpath = "//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']")
     private WebElement searchResult;
 
     public void clickSearchButton() {
@@ -37,7 +37,11 @@ public class GoogleCloudHomePage {
 
     public void waitSearchResults() {
         new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[contains(text(),'Search results for')]")));
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']")));
+    }
+
+    public Boolean isWebsiteCorrect() {
+        return driver.getTitle().equals("Cloud Computing Services " + '\u00a0' + "|" + '\u00a0' + " Google Cloud");
     }
 
 }
