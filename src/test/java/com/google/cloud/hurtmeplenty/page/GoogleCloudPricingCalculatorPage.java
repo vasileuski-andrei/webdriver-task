@@ -1,4 +1,4 @@
-package com.google.cloud.hurtmeplenty;
+package com.google.cloud.hurtmeplenty.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,8 +15,9 @@ public class GoogleCloudPricingCalculatorPage {
     public WebDriver driver;
 
     public GoogleCloudPricingCalculatorPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
         this.driver = driver;
+        PageFactory.initElements(driver, this);
+
     }
 
     @FindBy(xpath = "//md-card-content[@id='mainForm']//md-tab-item/div[@title='Compute Engine']")
@@ -25,10 +26,10 @@ public class GoogleCloudPricingCalculatorPage {
     @FindBy(xpath = "//form//input[@id='input_63']")
     private WebElement numberOfInstances;
 
-    @FindBy(xpath = "//md-select-value//div[contains(text(), 'Free: Debian, CentOS, CoreOS, Ubuntu, or other User Provided OS')]")
+    @FindBy(xpath = "//md-select-value[@id='select_value_label_56']")
     private WebElement menuOperatingSystemAndSoftware;
 
-    @FindBy(xpath = "//*[@id='select_value_label_57']/span/div[text()='Regular']")
+    @FindBy(xpath = "//md-select[@id='select_80']")
     private WebElement menuMachineClass;
 
     @FindBy(xpath = "//md-select[@name='series']")
@@ -40,13 +41,10 @@ public class GoogleCloudPricingCalculatorPage {
     @FindBy(xpath = "//md-checkbox/div[2]")
     private WebElement checkBoxAddGPU;
 
-    @FindBy(xpath = "//*[@id='select_value_label_392']/span/div")
-    private WebElement numberOfGPU;
-
-    @FindBy(xpath = "//md-select-value[@id='select_value_label_393']")
+    @FindBy(xpath = "//md-select[@id='select_396']")
     private WebElement typeGPU;
 
-    @FindBy(xpath = "//md-select-value[@id='select_value_label_354']/span/div")
+    @FindBy(xpath = "//md-select[@id='select_355']")
     private WebElement localSSD;
 
     @FindBy(xpath = "//md-select-value[@id='select_value_label_61']")
@@ -55,7 +53,10 @@ public class GoogleCloudPricingCalculatorPage {
     @FindBy(xpath = "//md-select-value[@id='select_value_label_62']")
     private WebElement commitedUsage;
 
-    @FindBy(xpath = "//form[@name='ComputeEngineForm']//button[contains (text(), 'Add to Estimate')]")
+    /**
+     * This is the only one of the 12 buttons on this form that doesn't contain a tag "md-icon" so I used this approach to find it.
+     */
+    @FindBy(xpath = "//form[@name='ComputeEngineForm']//button[not(md-icon)]")
     private WebElement addToEstimateButton;
 
     public void inputNumberOfInstances(String number) {
@@ -70,81 +71,56 @@ public class GoogleCloudPricingCalculatorPage {
         sectionComputeEngine.click();
     }
 
-    public void clickMenuOperatingSystemAndSoftware() {
-        menuOperatingSystemAndSoftware.click();
-    }
-
-    public void clickMenuMachineClass() {
-        menuMachineClass.click();
-    }
-
-    public void clickMenuSeries() {
-        series.click();
-    }
-
-    public void clickMenuMachineType() {
-        machineType.click();
-    }
-
-    public void clickMenuNumberOfGPU() {
-        numberOfGPU.click();
-    }
-
-    public void clickMenuTypeGPU() {
-        typeGPU.click();
-    }
-
-    public void clickMenuLocalSSD() {
-        localSSD.click();
-    }
-
-    public void clickMenuDatacenterLocation() {
-        datacenterLocation.click();
-    }
-
-    public void clickMenuCommitedUsage() {
-        commitedUsage.click();
-    }
-
     public void clickAddToEstimateButton() {
         addToEstimateButton.click();
     }
 
     public void selectElementFromMenuOperatingSystemAndSoftware(String element) {
+        menuOperatingSystemAndSoftware.click();
         driver.findElement(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuMachineClass(String element) {
+        menuMachineClass.click();
         driver.findElement(By.xpath("//md-option[@id='select_option_78' or @id='select_option_79']/div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuSeries(String element) {
+        series.click();
         driver.findElement(By.xpath("//md-option//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuMachineType(String element) {
+        machineType.click();
+        waitForAppearanceRequiredTypeOfGPU();
         driver.findElement(By.xpath("//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuNumberOfGPU() {
+        new WebDriverWait(driver, 10)
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_392']"))).click();
         driver.findElement(By.cssSelector("#select_option_399 > div.md-text.ng-binding")).click();
     }
 
     public void selectElementFromMenuTypeGPU(String element) {
+        typeGPU.click();
+        waitForDropMenuTypeGPU();
         driver.findElement(By.xpath("//md-option//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuLocalSSD(String element) {
+        localSSD.click();
         driver.findElement(By.xpath("//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuDatacenterLocation(String element) {
-        //driver.findElement(By.xpath("//md-content//md-option[@id='select_option_205']/div")).click();
+        datacenterLocation.click();
         List<WebElement> dataCenterLocation = driver.findElements(By.xpath("//md-option/div[contains (text(),'" +element+ "')]"));
         dataCenterLocation.get(2).click();
     }
 
     public void selectElementFromMenuCommitedUsage(String element) {
+        commitedUsage.click();
         driver.findElement(By.xpath("//div[@id='select_container_100']//div[text()='" +element+ "']")).click();
     }
 
@@ -155,17 +131,12 @@ public class GoogleCloudPricingCalculatorPage {
 
     public void waitForAppearanceRequiredTypeOfGPU() {
         new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select//div[contains (text(), 'n1-standard-1 (vCPUs: 1, RAM: 3.75GB)')]")));
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]")));
     }
 
-    public void waitForAppearanceMenuNumberOfGPU() {
+    public void waitForDropMenuTypeGPU() {
         new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div/md-input-container/label[text()='Number of GPUs']")));
-    }
-
-    public void waitForAppearanceMenuTypeGPU() {
-        new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_393']")));
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']")));
     }
 
     public Boolean isVirtualMachineClassCorrect(String virtualMachineClass) {

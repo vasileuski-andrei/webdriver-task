@@ -1,11 +1,14 @@
 package com.google.cloud.hurtmeplenty;
 
+import com.google.cloud.hurtmeplenty.page.GoogleCloudHomePage;
+import com.google.cloud.hurtmeplenty.page.GoogleCloudPricingCalculatorPage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,85 +41,46 @@ public class GoogleCloudTest {
 
     @Before
     public void setup() {
-
-        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
-        driver = new ChromeDriver();
-        cloudHomePage = new GoogleCloudHomePage(driver);
-        pricingCalculatorPage = new GoogleCloudPricingCalculatorPage(driver);
+        driver = DriverFactory.getDriver("chrome");
         driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-        driver.get("https://cloud.google.com/");
-
-    }
-
-    @Test
-    public void checkWebsiteTitle() {
-        Assert.assertTrue(cloudHomePage.isWebsiteCorrect());
     }
 
     @Test
     public void testPricingCalculator() {
 
-        cloudHomePage.clickSearchButton();
-        cloudHomePage.inputSearchText("Google Cloud Platform Pricing Calculator \n");
-        cloudHomePage.waitSearchResults();
-        cloudHomePage.clickSearchResultLink();
+        String expectedVirtualMachineClass = "regular";
+        String expectedInstanceType = "n1-standard-8";
+        String expectedDataCenterLocation = "Frankfurt";
+        String expectedLocalSSD = "2x375";
+        String expectedCommitmentTerm = "1 Year";
+        String expectedEstimatedCostPerMonth = "1,082.77";
+
+        cloudHomePage = new GoogleCloudHomePage(driver);
+        cloudHomePage.openPage();
+        Assert.assertTrue(cloudHomePage.isWebsiteCorrect());
+        pricingCalculatorPage = cloudHomePage.searchPricingCalculatorPage("Google Cloud Platform Pricing Calculator");
 
         pricingCalculatorPage.waitForOpenPricingCalculatorPageAndSwitchToFrame();
         pricingCalculatorPage.clickSectionComputeEngine();
         pricingCalculatorPage.inputNumberOfInstances("4");
-
-        pricingCalculatorPage.clickMenuOperatingSystemAndSoftware();
         pricingCalculatorPage.selectElementFromMenuOperatingSystemAndSoftware("Free: Debian, CentOS, CoreOS, Ubuntu, or other User Provided OS");
-
-        pricingCalculatorPage.clickMenuMachineClass();
         pricingCalculatorPage.selectElementFromMenuMachineClass("Regular");
-
-        pricingCalculatorPage.clickMenuSeries();
         pricingCalculatorPage.selectElementFromMenuSeries("N1");
-
-        pricingCalculatorPage.clickMenuMachineType();
-        pricingCalculatorPage.waitForAppearanceRequiredTypeOfGPU();
         pricingCalculatorPage.selectElementFromMenuMachineType("n1-standard-8 (vCPUs: 8, RAM: 30GB)");
-
         pricingCalculatorPage.selectCheckBoxAddGPU();
-
-        pricingCalculatorPage.waitForAppearanceMenuNumberOfGPU();
-        pricingCalculatorPage.clickMenuNumberOfGPU();
         pricingCalculatorPage.selectElementFromMenuNumberOfGPU();
-
-        pricingCalculatorPage.waitForAppearanceMenuTypeGPU();
-        pricingCalculatorPage.clickMenuTypeGPU();
         pricingCalculatorPage.selectElementFromMenuTypeGPU("NVIDIA Tesla V100");
-
-        pricingCalculatorPage.clickMenuLocalSSD();
         pricingCalculatorPage.selectElementFromMenuLocalSSD("2x375 GB");
-
-        pricingCalculatorPage.clickMenuDatacenterLocation();
         pricingCalculatorPage.selectElementFromMenuDatacenterLocation("Frankfurt (europe-west3)");
-
-        pricingCalculatorPage.clickMenuCommitedUsage();
         pricingCalculatorPage.selectElementFromMenuCommitedUsage("1 Year");
-
         pricingCalculatorPage.clickAddToEstimateButton();
 
-        String virtualMachineClass = "regular";
-        Assert.assertTrue(pricingCalculatorPage.isVirtualMachineClassCorrect(virtualMachineClass));
-
-        String instanceType = "n1-standard-8";
-        Assert.assertTrue(pricingCalculatorPage.isInstanceTypeCorrect(instanceType));
-
-        String dataCenterLocation = "Frankfurt";
-        Assert.assertTrue(pricingCalculatorPage.isDataCenterLocationCorrect(dataCenterLocation));
-
-        String localSSD = "2x375";
-        Assert.assertTrue(pricingCalculatorPage.isLocalSSDCorrect(localSSD));
-
-        String commitmentTerm = "1 Year";
-        Assert.assertTrue(pricingCalculatorPage.isCommitmentTermCorrect(commitmentTerm));
-
-        String estimatedCostPerMonth = "1,082.77";
-        Assert.assertTrue(pricingCalculatorPage.isEstimatedCostPerMonthCorrect(estimatedCostPerMonth));
+        Assert.assertTrue(pricingCalculatorPage.isVirtualMachineClassCorrect(expectedVirtualMachineClass));
+        Assert.assertTrue(pricingCalculatorPage.isInstanceTypeCorrect(expectedInstanceType));
+        Assert.assertTrue(pricingCalculatorPage.isDataCenterLocationCorrect(expectedDataCenterLocation));
+        Assert.assertTrue(pricingCalculatorPage.isLocalSSDCorrect(expectedLocalSSD));
+        Assert.assertTrue(pricingCalculatorPage.isCommitmentTermCorrect(expectedCommitmentTerm));
+        Assert.assertTrue(pricingCalculatorPage.isEstimatedCostPerMonthCorrect(expectedEstimatedCostPerMonth));
 
     }
 
