@@ -4,20 +4,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-public class GoogleCloudPricingCalculatorPage {
-
-    public WebDriver driver;
+public class GoogleCloudPricingCalculatorPage extends BasePage {
 
     public GoogleCloudPricingCalculatorPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-
+        super(driver);
     }
 
     @FindBy(xpath = "//md-card-content[@id='mainForm']//md-tab-item/div[@title='Compute Engine']")
@@ -97,7 +92,7 @@ public class GoogleCloudPricingCalculatorPage {
     }
 
     public void selectElementFromMenuNumberOfGPU() {
-        new WebDriverWait(driver, 10)
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_392']"))).click();
         driver.findElement(By.cssSelector("#select_option_399 > div.md-text.ng-binding")).click();
     }
@@ -115,8 +110,7 @@ public class GoogleCloudPricingCalculatorPage {
 
     public void selectElementFromMenuDatacenterLocation(String element) {
         datacenterLocation.click();
-        List<WebElement> dataCenterLocation = driver.findElements(By.xpath("//md-option/div[contains (text(),'" +element+ "')]"));
-        dataCenterLocation.get(2).click();
+        driver.findElement(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuCommitedUsage(String element) {
@@ -125,17 +119,17 @@ public class GoogleCloudPricingCalculatorPage {
     }
 
     public void waitForOpenPricingCalculatorPageAndSwitchToFrame() {
-        new WebDriverWait(driver, 10)
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(0)).switchTo().frame("myFrame");
     }
 
     public void waitForAppearanceRequiredTypeOfGPU() {
-        new WebDriverWait(driver, 10)
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]")));
     }
 
     public void waitForDropMenuTypeGPU() {
-        new WebDriverWait(driver, 10)
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']")));
     }
 

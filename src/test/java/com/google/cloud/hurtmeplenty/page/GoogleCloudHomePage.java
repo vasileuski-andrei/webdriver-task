@@ -1,26 +1,19 @@
 package com.google.cloud.hurtmeplenty.page;
 
-import com.google.cloud.hurtmeplenty.DriverFactory;
-import com.google.cloud.hurtmeplenty.GoogleCloudTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class GoogleCloudHomePage {
+public class GoogleCloudHomePage extends BasePage {
 
     private static final String HOME_PAGE_URL = "https://cloud.google.com/";
-    private WebDriver driver;
-
 
     public GoogleCloudHomePage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-
+        super(driver);
     }
 
     @FindBy(xpath = "//input[@name='q']")
@@ -31,7 +24,7 @@ public class GoogleCloudHomePage {
 
     public GoogleCloudHomePage openPage() {
         driver.get(HOME_PAGE_URL);
-        new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@name='q']")));
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@name='q']")));
         return this;
     }
 
@@ -48,7 +41,7 @@ public class GoogleCloudHomePage {
     }
 
     public void waitSearchResults() {
-        new WebDriverWait(driver, 10)
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']")));
     }
 

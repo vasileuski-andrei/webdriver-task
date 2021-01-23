@@ -7,10 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
-
-import java.util.concurrent.TimeUnit;
 
 // 1.Открыть https://cloud.google.com/ +++
 // 2.Нажав кнопку поиска по порталу вверху страницы, ввести в поле поиска"Google Cloud Platform Pricing Calculator" +++
@@ -41,7 +37,7 @@ public class GoogleCloudTest {
 
     @Before
     public void setup() {
-        driver = DriverFactory.getDriver("chrome");
+        driver = DriverFactory.getDriver();
         driver.manage().window().maximize();
     }
 
@@ -61,18 +57,40 @@ public class GoogleCloudTest {
         pricingCalculatorPage = cloudHomePage.searchPricingCalculatorPage("Google Cloud Platform Pricing Calculator");
 
         pricingCalculatorPage.waitForOpenPricingCalculatorPageAndSwitchToFrame();
+
         pricingCalculatorPage.clickSectionComputeEngine();
-        pricingCalculatorPage.inputNumberOfInstances("4");
-        pricingCalculatorPage.selectElementFromMenuOperatingSystemAndSoftware("Free: Debian, CentOS, CoreOS, Ubuntu, or other User Provided OS");
-        pricingCalculatorPage.selectElementFromMenuMachineClass("Regular");
-        pricingCalculatorPage.selectElementFromMenuSeries("N1");
-        pricingCalculatorPage.selectElementFromMenuMachineType("n1-standard-8 (vCPUs: 8, RAM: 30GB)");
+
+        String numberOfInstances = "4";
+        pricingCalculatorPage.inputNumberOfInstances(numberOfInstances);
+
+        String operatingSystemAndSoftware = "Free: Debian, CentOS, CoreOS, Ubuntu, or other User Provided OS";
+        pricingCalculatorPage.selectElementFromMenuOperatingSystemAndSoftware(operatingSystemAndSoftware);
+
+        String machineClass = "Regular";
+        pricingCalculatorPage.selectElementFromMenuMachineClass(machineClass);
+
+        String series = "N1";
+        pricingCalculatorPage.selectElementFromMenuSeries(series);
+
+        String machineType = "n1-standard-8 (vCPUs: 8, RAM: 30GB)";
+        pricingCalculatorPage.selectElementFromMenuMachineType(machineType);
+
         pricingCalculatorPage.selectCheckBoxAddGPU();
+
         pricingCalculatorPage.selectElementFromMenuNumberOfGPU();
-        pricingCalculatorPage.selectElementFromMenuTypeGPU("NVIDIA Tesla V100");
-        pricingCalculatorPage.selectElementFromMenuLocalSSD("2x375 GB");
-        pricingCalculatorPage.selectElementFromMenuDatacenterLocation("Frankfurt (europe-west3)");
-        pricingCalculatorPage.selectElementFromMenuCommitedUsage("1 Year");
+
+        String typeGPU = "NVIDIA Tesla V100";
+        pricingCalculatorPage.selectElementFromMenuTypeGPU(typeGPU);
+
+        String localSSD = "2x375 GB";
+        pricingCalculatorPage.selectElementFromMenuLocalSSD(localSSD);
+
+        String datacenterLocation = "Frankfurt (europe-west3)";
+        pricingCalculatorPage.selectElementFromMenuDatacenterLocation(datacenterLocation);
+
+        String commitedUsage = "1 Year";
+        pricingCalculatorPage.selectElementFromMenuCommitedUsage(commitedUsage);
+
         pricingCalculatorPage.clickAddToEstimateButton();
 
         Assert.assertTrue(pricingCalculatorPage.isVirtualMachineClassCorrect(expectedVirtualMachineClass));

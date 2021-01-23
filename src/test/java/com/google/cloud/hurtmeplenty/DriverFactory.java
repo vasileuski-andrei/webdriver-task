@@ -5,15 +5,15 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public abstract class DriverFactory {
 
-    public static WebDriver getDriver(String name) {
-        WebDriver driver = null;
+    private static WebDriver driver;
 
-        if ("chrome".equalsIgnoreCase(name)) {
+    public static WebDriver getDriver() {
+
+        if (driver == null) {
             driver= new ChromeDriver();
         }
 
         return driver;
-
     }
 
 }
