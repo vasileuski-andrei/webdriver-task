@@ -1,6 +1,6 @@
 package com.google.cloud.hurtmeplenty;
 
-import com.google.cloud.hurtmeplenty.page.GoogleCloudHomePage;
+import com.google.cloud.hurtmeplenty.page.CloudHomePage;
 import com.google.cloud.hurtmeplenty.page.GoogleCloudPricingCalculatorPage;
 import org.junit.After;
 import org.junit.Assert;
@@ -32,7 +32,7 @@ import org.openqa.selenium.WebDriver;
 public class GoogleCloudTest {
 
     public WebDriver driver;
-    public GoogleCloudHomePage cloudHomePage;
+    public CloudHomePage cloudHomePage;
     public GoogleCloudPricingCalculatorPage pricingCalculatorPage;
 
     @Before
@@ -51,7 +51,7 @@ public class GoogleCloudTest {
         String expectedCommitmentTerm = "1 Year";
         String expectedEstimatedCostPerMonth = "1,082.77";
 
-        cloudHomePage = new GoogleCloudHomePage(driver);
+        cloudHomePage = new CloudHomePage(driver);
         cloudHomePage.openPage();
         Assert.assertTrue(cloudHomePage.isWebsiteCorrect());
         pricingCalculatorPage = cloudHomePage.searchPricingCalculatorPage("Google Cloud Platform Pricing Calculator");
@@ -92,6 +92,7 @@ public class GoogleCloudTest {
         pricingCalculatorPage.selectElementFromMenuCommitedUsage(commitedUsage);
 
         pricingCalculatorPage.clickAddToEstimateButton();
+
 
         Assert.assertTrue(pricingCalculatorPage.isVirtualMachineClassCorrect(expectedVirtualMachineClass));
         Assert.assertTrue(pricingCalculatorPage.isInstanceTypeCorrect(expectedInstanceType));

@@ -1,4 +1,4 @@
-package com.google.cloud.hurtmeplenty.page;
+package com.google.cloud.hardcore.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -8,11 +8,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class GoogleCloudHomePage extends BasePage {
+public class HomePage extends BasePage {
 
-    private static final String HOME_PAGE_URL = "https://cloud.google.com/";
-
-    public GoogleCloudHomePage(WebDriver driver) {
+    public HomePage(WebDriver driver) {
         super(driver);
     }
 
@@ -21,12 +19,6 @@ public class GoogleCloudHomePage extends BasePage {
 
     @FindBy(xpath = "//div[@class='gs-title']/a[@href='https://cloud.google.com/products/calculator']")
     private WebElement searchResult;
-
-    public GoogleCloudHomePage openPage() {
-        driver.get(HOME_PAGE_URL);
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@name='q']")));
-        return this;
-    }
 
     public void clickSearchButton() {
         searchFieldAndButton.click();
@@ -45,21 +37,13 @@ public class GoogleCloudHomePage extends BasePage {
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']")));
     }
 
-    /**
-     * The title of this website contains "non-breaking space" so I used "replace" '\u00a0' to make it easier to read and compare.
-     */
-    public Boolean isWebsiteCorrect() {
-        return driver.getTitle().replace(Character.toString('\u00a0'), "").equals("Cloud Computing Services | Google Cloud");
-    }
-
-    public GoogleCloudPricingCalculatorPage searchPricingCalculatorPage(String webPage) {
+    public PricingCalculatorPage searchPricingCalculatorPage(String webPage) {
         clickSearchButton();
         inputSearchText(webPage);
         waitSearchResults();
         clickSearchResultLink();
 
-        return new GoogleCloudPricingCalculatorPage(driver);
+        return new PricingCalculatorPage(driver);
     }
-    
 
 }
