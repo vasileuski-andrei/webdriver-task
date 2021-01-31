@@ -1,18 +1,7 @@
-package com.google.cloud.hardcore;
+package com.google.cloud.hardcore.test;
 
-import com.google.cloud.hardcore.page.EmailYourEstimatePage;
-import com.google.cloud.hardcore.page.HomePage;
-import com.google.cloud.hardcore.page.PricingCalculatorPage;
-import com.google.cloud.hardcore.page.TenMinutePage;
-import com.google.cloud.hardcore.utility.DriverFactory;
-import com.google.cloud.hardcore.utility.NavigationService;
-import com.google.cloud.hardcore.waits.Waits;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 // 1. Открыть https://cloud.google.com/
 // 2. Нажав кнопку поиска по порталу вверху страницы, ввести в поле поиска"Google Cloud Platform Pricing Calculator"
@@ -40,23 +29,7 @@ import org.openqa.selenium.WebElement;
 // 12. Нажать SEND EMAIL
 // 13. Дождаться письма с рассчетом стоимости и проверить что Total Estimated Monthly Cost в письме совпадает с тем, что отображается в калькуляторе
 
-public class GoogleCloudTest {
-
-    private WebDriver driver;
-    private HomePage homePage;
-    private PricingCalculatorPage pricingCalculatorPage;
-    private EmailYourEstimatePage emailYourEstimatePage;
-    private TenMinutePage tenMinutePage;
-    private NavigationService navigationService;
-    private Waits waits;
-
-    @Before
-    public void setup() {
-        driver = DriverFactory.getDriver();
-        driver.manage().window().maximize();
-        navigationService = new NavigationService(driver);
-        waits = new Waits(driver);
-    }
+public class GoogleCloudTest extends CommonConditions {
 
     @Test
     public void testPricingCalculator() {
@@ -109,33 +82,26 @@ public class GoogleCloudTest {
 
         emailYourEstimatePage = pricingCalculatorPage.clickEmailEstimateButton();
 
-        waits.waitForAppearanceElement(emailYourEstimatePage.getEmailYourEstimateForm());
+        waitingForEvents.waitForAppearanceElement(emailYourEstimatePage.getEmailYourEstimateForm());
 
         navigationService.openNewTab();
-        int tabIndex = 1;
-        navigationService.switchToTab(tabIndex);
+        navigationService.switchToNextTab();
         tenMinutePage = navigationService.openPage("https://10minutemail.com");
 
-        waits.waitForAppearanceElementAndClick(tenMinutePage.getCopiedEmailAddress());
+        waitingForEvents.waitForAppearanceElementAndClick(tenMinutePage.getCopiedEmailAddress());
 
-        tabIndex = 0;
-        navigationService.switchToTab(tabIndex);
-
-        navigationService.switchToFrame("myFrame");
+        navigationService.switchToPreviousTab();
 
         navigationService.pasteCopiedData(emailYourEstimatePage.getEmailField());
 
         emailYourEstimatePage.clickSendEmailButton();
 
-        tabIndex = 1;
-        navigationService.switchToTab(tabIndex);
+        navigationService.switchToNextTab();
 
         tenMinutePage.waitForALetter();
         String estimatedCostPerMonthFromEmail = tenMinutePage.getEstimatedCostPerMonthFromEmail();
 
-        tabIndex = 0;
-        navigationService.switchToTab(tabIndex);
-        navigationService.switchToFrame("myFrame");
+        navigationService.switchToPreviousTab();
 
         Assert.assertTrue(pricingCalculatorPage.isVirtualMachineClassCorrect(expectedVirtualMachineClass));
         Assert.assertTrue(pricingCalculatorPage.isInstanceTypeCorrect(expectedInstanceType));
@@ -145,11 +111,6 @@ public class GoogleCloudTest {
         Assert.assertTrue(pricingCalculatorPage.isEstimatedCostPerMonthCorrect(expectedEstimatedCostPerMonth));
         Assert.assertTrue(pricingCalculatorPage.isEstimatedCostPerMonthCorrect(estimatedCostPerMonthFromEmail));
 
-    }
-
-    @After
-    public void close() {
-        driver.quit();
     }
 
 }

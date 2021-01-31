@@ -1,4 +1,4 @@
-package com.google.cloud.hardcore.utility;
+package com.google.cloud.hardcore.driver;
 
 import com.google.cloud.hardcore.page.BasePage;
 import com.google.cloud.hardcore.page.HomePage;
@@ -17,14 +17,15 @@ import java.util.Map;
 
 public class NavigationService {
 
+    public static final int WAIT_TIMEOUT_SECONDS = 15;
     private WebDriver driver;
     private Map<String, BasePage> pageUrl;
 
     public NavigationService(WebDriver driver) {
         this.driver = driver;
         pageUrl = new HashMap();
-        pageUrl.put("https://cloud.google.com/", new HomePage(driver));
-        pageUrl.put("https://10minutemail.com", new TenMinutePage(driver));
+        pageUrl.put("https://cloud.google.com/", new HomePage());
+        pageUrl.put("https://10minutemail.com", new TenMinutePage());
     }
 
     public <T extends BasePage> T openPage(String url) {
@@ -39,8 +40,26 @@ public class NavigationService {
         ((JavascriptExecutor)driver).executeScript("window.open()");
     }
 
+    public void switchToNextTab() {
+        List<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        int currentTab = tabs.indexOf(driver.getWindowHandle());
+        driver.switchTo().window(tabs.get(currentTab + 1));
+    }
+
+    public void switchToPreviousTab() {
+        List<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        int currentTab = tabs.indexOf(driver.getWindowHandle());
+        if (currentTab != 0) {
+            driver.switchTo().window(tabs.get(currentTab - 1));
+            if (tabs.indexOf(driver.getWindowHandle()) == 0) {
+                switchToFrame("myFrame");
+            }
+        }
+    }
+
     public void switchToTab(int tabIndex) {
         List<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        System.out.println(tabs.indexOf(driver.getWindowHandle()));
         driver.switchTo().window(tabs.get(tabIndex));
     }
 
@@ -56,7 +75,7 @@ public class NavigationService {
     }
 
     public void switchToFrame(String frameName) {
-        new WebDriverWait(driver, 10)
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(0)).switchTo().frame(frameName);
     }
 

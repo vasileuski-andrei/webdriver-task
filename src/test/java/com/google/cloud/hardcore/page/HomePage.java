@@ -2,17 +2,10 @@ package com.google.cloud.hardcore.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage extends BasePage {
-
-    public HomePage(WebDriver driver) {
-        super(driver);
-    }
 
     @FindBy(xpath = "//input[@name='q']")
     private WebElement searchFieldAndButton;
@@ -33,8 +26,7 @@ public class HomePage extends BasePage {
     }
 
     public void waitSearchResults() {
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']")));
+        waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']"));
     }
 
     public PricingCalculatorPage searchPricingCalculatorPage(String webPage) {
@@ -43,7 +35,7 @@ public class HomePage extends BasePage {
         waitSearchResults();
         clickSearchResultLink();
 
-        return new PricingCalculatorPage(driver);
+        return new PricingCalculatorPage();
     }
 
 }

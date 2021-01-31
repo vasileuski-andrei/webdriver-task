@@ -1,17 +1,10 @@
 package com.google.cloud.hardcore.page;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PricingCalculatorPage extends BasePage {
-
-    public PricingCalculatorPage(WebDriver driver) {
-        super(driver);
-    }
 
     @FindBy(xpath = "//md-card-content[@id='mainForm']//md-tab-item/div[@title='Compute Engine']")
     private WebElement sectionComputeEngine;
@@ -64,7 +57,7 @@ public class PricingCalculatorPage extends BasePage {
     }
 
     public void clickSectionComputeEngine() {
-        sectionComputeEngine.click();
+        waitingForEvents.waitForAppearanceElementAndClick(sectionComputeEngine);
     }
 
     public void clickAddToEstimateButton() {
@@ -73,13 +66,12 @@ public class PricingCalculatorPage extends BasePage {
 
     public EmailYourEstimatePage clickEmailEstimateButton() {
         emailEstimateButton.click();
-        return new EmailYourEstimatePage(driver);
+        return new EmailYourEstimatePage();
     }
 
     public void selectElementFromMenuOperatingSystemAndSoftware(String element) {
         menuOperatingSystemAndSoftware.click();
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]")));
+        waitingForEvents.waitForAppearanceInvisibilityOfElementLocatedBy(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]"));
         driver.findElement(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]")).click();
     }
 
@@ -95,19 +87,18 @@ public class PricingCalculatorPage extends BasePage {
 
     public void selectElementFromMenuMachineType(String element) {
         machineType.click();
-        waitForAppearanceRequiredTypeOfGPU();
+        waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]"));
         driver.findElement(By.xpath("//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuNumberOfGPU() {
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_392']"))).click();
+        waitingForEvents.waitForAppearanceElementLocatedByAndClick(By.xpath("//md-select-value[@id='select_value_label_392']"));
         driver.findElement(By.cssSelector("#select_option_399 > div.md-text.ng-binding")).click();
     }
 
     public void selectElementFromMenuTypeGPU(String element) {
         typeGPU.click();
-        waitForDropMenuTypeGPU();
+        waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']"));
         driver.findElement(By.xpath("//md-option//div[contains (text(),'" +element+ "')]")).click();
     }
 
@@ -118,23 +109,13 @@ public class PricingCalculatorPage extends BasePage {
 
     public void selectElementFromMenuDatacenterLocation(String element) {
         datacenterLocation.click();
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]"))).click();
+        waitingForEvents.waitForAppearanceInvisibilityOfElementLocatedBy(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]"));
+        driver.findElement(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuCommitedUsage(String element) {
         commitedUsage.click();
         driver.findElement(By.xpath("//div[@id='select_container_100']//div[text()='" +element+ "']")).click();
-    }
-
-    public void waitForAppearanceRequiredTypeOfGPU() {
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]")));
-    }
-
-    public void waitForDropMenuTypeGPU() {
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']")));
     }
 
     public Boolean isVirtualMachineClassCorrect(String virtualMachineClass) {

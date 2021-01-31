@@ -5,10 +5,6 @@ import org.openqa.selenium.support.FindBy;
 
 public class EmailYourEstimatePage extends BasePage {
 
-    public EmailYourEstimatePage(WebDriver driver) {
-        super(driver);
-    }
-
     @FindBy (xpath = "//input[@type='email']")
     private WebElement emailField;
 
