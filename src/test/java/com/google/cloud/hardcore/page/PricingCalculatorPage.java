@@ -3,6 +3,7 @@ package com.google.cloud.hardcore.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class PricingCalculatorPage extends BasePage {
 
@@ -26,6 +27,9 @@ public class PricingCalculatorPage extends BasePage {
 
     @FindBy(xpath = "//md-checkbox/div[2]")
     private WebElement checkBoxAddGPU;
+
+    @FindBy(xpath = "//md-select-value[@id='select_value_label_392']")
+    private WebElement numberOfGPU;
 
     @FindBy(xpath = "//md-select[@id='select_396']")
     private WebElement typeGPU;
@@ -57,7 +61,8 @@ public class PricingCalculatorPage extends BasePage {
     }
 
     public void clickSectionComputeEngine() {
-        waitingForEvents.waitForAppearanceElementAndClick(sectionComputeEngine);
+        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(sectionComputeEngine));
+        sectionComputeEngine.click();
     }
 
     public void clickAddToEstimateButton() {
@@ -71,7 +76,7 @@ public class PricingCalculatorPage extends BasePage {
 
     public void selectElementFromMenuOperatingSystemAndSoftware(String element) {
         menuOperatingSystemAndSoftware.click();
-        waitingForEvents.waitForAppearanceInvisibilityOfElementLocatedBy(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]"));
+        waitingForEvents.waitFor(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]")));
         driver.findElement(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]")).click();
     }
 
@@ -87,18 +92,19 @@ public class PricingCalculatorPage extends BasePage {
 
     public void selectElementFromMenuMachineType(String element) {
         machineType.click();
-        waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]"));
+        waitingForEvents.waitFor(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]")));
         driver.findElement(By.xpath("//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuNumberOfGPU() {
-        waitingForEvents.waitForAppearanceElementLocatedByAndClick(By.xpath("//md-select-value[@id='select_value_label_392']"));
+        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(numberOfGPU));
+        numberOfGPU.click();
         driver.findElement(By.cssSelector("#select_option_399 > div.md-text.ng-binding")).click();
     }
 
     public void selectElementFromMenuTypeGPU(String element) {
         typeGPU.click();
-        waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']"));
+        waitingForEvents.waitFor(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']")));
         driver.findElement(By.xpath("//md-option//div[contains (text(),'" +element+ "')]")).click();
     }
 
@@ -109,7 +115,7 @@ public class PricingCalculatorPage extends BasePage {
 
     public void selectElementFromMenuDatacenterLocation(String element) {
         datacenterLocation.click();
-        waitingForEvents.waitForAppearanceInvisibilityOfElementLocatedBy(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]"));
+        waitingForEvents.waitFor(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]")));
         driver.findElement(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]")).click();
     }
 

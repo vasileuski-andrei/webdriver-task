@@ -1,8 +1,8 @@
 package com.google.cloud.hardcore.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class TenMinutePage extends BasePage {
 
@@ -12,12 +12,17 @@ public class TenMinutePage extends BasePage {
     @FindBy(xpath = "//table[@class='quote']//td[not(@colspan)]/h3")
     private WebElement estimatedBill;
 
-    public WebElement getCopiedEmailAddress() {
-        return copiedEmailAddress;
+    @FindBy(xpath = "//div[@class='message_top']")
+    private WebElement inboxLetter;
+
+    public void copyEmailAddress() {
+        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(copiedEmailAddress));
+        copiedEmailAddress.click();
     }
 
     public void waitForALetter() {
-        waitingForEvents.waitForAppearanceElementLocatedByAndClick(By.xpath("//div[@class='message_top']"));
+        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(inboxLetter));
+        inboxLetter.click();
     }
 
     public String getEstimatedCostPerMonthFromEmail() {

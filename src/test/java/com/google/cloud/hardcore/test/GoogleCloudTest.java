@@ -29,7 +29,7 @@ import org.junit.Test;
 // 12. Нажать SEND EMAIL
 // 13. Дождаться письма с рассчетом стоимости и проверить что Total Estimated Monthly Cost в письме совпадает с тем, что отображается в калькуляторе
 
-public class GoogleCloudTest extends CommonConditions {
+public class GoogleCloudTest extends BaseTest {
 
     @Test
     public void testPricingCalculator() {
@@ -81,17 +81,15 @@ public class GoogleCloudTest extends CommonConditions {
         pricingCalculatorPage.clickAddToEstimateButton();
 
         emailYourEstimatePage = pricingCalculatorPage.clickEmailEstimateButton();
-
-        waitingForEvents.waitForAppearanceElement(emailYourEstimatePage.getEmailYourEstimateForm());
+        emailYourEstimatePage.waitForAppearanceOfEmailYourEstimateForm();
 
         navigationService.openNewTab();
         navigationService.switchToNextTab();
         tenMinutePage = navigationService.openPage("https://10minutemail.com");
-
-        waitingForEvents.waitForAppearanceElementAndClick(tenMinutePage.getCopiedEmailAddress());
+        tenMinutePage.copyEmailAddress();
 
         navigationService.switchToPreviousTab();
-
+        navigationService.switchToFrame("myFrame");
         navigationService.pasteCopiedData(emailYourEstimatePage.getEmailField());
 
         emailYourEstimatePage.clickSendEmailButton();
@@ -102,6 +100,7 @@ public class GoogleCloudTest extends CommonConditions {
         String estimatedCostPerMonthFromEmail = tenMinutePage.getEstimatedCostPerMonthFromEmail();
 
         navigationService.switchToPreviousTab();
+        navigationService.switchToFrame("myFrame");
 
         Assert.assertTrue(pricingCalculatorPage.isVirtualMachineClassCorrect(expectedVirtualMachineClass));
         Assert.assertTrue(pricingCalculatorPage.isInstanceTypeCorrect(expectedInstanceType));

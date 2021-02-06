@@ -4,12 +4,9 @@ import com.google.cloud.hardcore.page.BasePage;
 import com.google.cloud.hardcore.page.HomePage;
 import com.google.cloud.hardcore.page.TenMinutePage;
 import com.google.cloud.hardcore.page.UndefinedPage;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.google.cloud.hardcore.waits.WaitingForEvents;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,15 +14,16 @@ import java.util.Map;
 
 public class NavigationService {
 
-    public static final int WAIT_TIMEOUT_SECONDS = 15;
     private WebDriver driver;
     private Map<String, BasePage> pageUrl;
+    private WaitingForEvents waitingForEvents;
 
     public NavigationService(WebDriver driver) {
         this.driver = driver;
         pageUrl = new HashMap();
         pageUrl.put("https://cloud.google.com/", new HomePage());
         pageUrl.put("https://10minutemail.com", new TenMinutePage());
+        waitingForEvents = new WaitingForEvents(driver);
     }
 
     public <T extends BasePage> T openPage(String url) {
@@ -51,16 +49,7 @@ public class NavigationService {
         int currentTab = tabs.indexOf(driver.getWindowHandle());
         if (currentTab != 0) {
             driver.switchTo().window(tabs.get(currentTab - 1));
-            if (tabs.indexOf(driver.getWindowHandle()) == 0) {
-                switchToFrame("myFrame");
-            }
         }
-    }
-
-    public void switchToTab(int tabIndex) {
-        List<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-        System.out.println(tabs.indexOf(driver.getWindowHandle()));
-        driver.switchTo().window(tabs.get(tabIndex));
     }
 
     /**
@@ -75,8 +64,8 @@ public class NavigationService {
     }
 
     public void switchToFrame(String frameName) {
-        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(0)).switchTo().frame(frameName);
+        waitingForEvents.waitFor(ExpectedConditions.frameToBeAvailableAndSwitchToIt(0));
+        driver.switchTo().frame(frameName);
     }
 
 }

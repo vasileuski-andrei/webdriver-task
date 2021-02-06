@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class HomePage extends BasePage {
 
@@ -26,7 +27,7 @@ public class HomePage extends BasePage {
     }
 
     public void waitSearchResults() {
-        waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']"));
+        waitingForEvents.waitFor(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']")));
     }
 
     public PricingCalculatorPage searchPricingCalculatorPage(String webPage) {

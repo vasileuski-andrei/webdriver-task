@@ -2,6 +2,7 @@ package com.google.cloud.hardcore.page;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class EmailYourEstimatePage extends BasePage {
 
@@ -18,8 +19,8 @@ public class EmailYourEstimatePage extends BasePage {
         sendEmailButton.click();
     }
 
-    public WebElement getEmailYourEstimateForm() {
-        return emailYourEstimateForm;
+    public void waitForAppearanceOfEmailYourEstimateForm() {
+        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(emailYourEstimateForm));
     }
 
     public WebElement getEmailField() {
