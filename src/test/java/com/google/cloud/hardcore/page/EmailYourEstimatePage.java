@@ -20,7 +20,7 @@ public class EmailYourEstimatePage extends BasePage {
     }
 
     public void waitForAppearanceOfEmailYourEstimateForm() {
-        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(emailYourEstimateForm));
+        waitingForEvents.waitForCondition(ExpectedConditions.visibilityOf(emailYourEstimateForm));
     }
 
     public WebElement getEmailField() {

@@ -44,7 +44,7 @@ public class GoogleCloudTest extends BaseTest {
         homePage = navigationService.openPage("https://cloud.google.com/");
         Assert.assertTrue(navigationService.isWebsiteCorrect());
         pricingCalculatorPage = homePage.searchPricingCalculatorPage("Google Cloud Platform Pricing Calculator");
-        navigationService.switchToFrame("myFrame");
+        pricingCalculatorPage.switchToFrame("myFrame");
         pricingCalculatorPage.clickSectionComputeEngine();
 
         String numberOfInstances = "4";
@@ -89,7 +89,7 @@ public class GoogleCloudTest extends BaseTest {
         tenMinutePage.copyEmailAddress();
 
         navigationService.switchToPreviousTab();
-        navigationService.switchToFrame("myFrame");
+        pricingCalculatorPage.switchToFrame("myFrame");
         navigationService.pasteCopiedData(emailYourEstimatePage.getEmailField());
 
         emailYourEstimatePage.clickSendEmailButton();
@@ -100,7 +100,7 @@ public class GoogleCloudTest extends BaseTest {
         String estimatedCostPerMonthFromEmail = tenMinutePage.getEstimatedCostPerMonthFromEmail();
 
         navigationService.switchToPreviousTab();
-        navigationService.switchToFrame("myFrame");
+        pricingCalculatorPage.switchToFrame("myFrame");
 
         Assert.assertTrue(pricingCalculatorPage.isVirtualMachineClassCorrect(expectedVirtualMachineClass));
         Assert.assertTrue(pricingCalculatorPage.isInstanceTypeCorrect(expectedInstanceType));

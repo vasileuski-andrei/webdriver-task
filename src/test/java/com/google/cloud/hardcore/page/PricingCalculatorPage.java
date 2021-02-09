@@ -3,7 +3,6 @@ package com.google.cloud.hardcore.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class PricingCalculatorPage extends BasePage {
 
@@ -52,6 +51,11 @@ public class PricingCalculatorPage extends BasePage {
     @FindBy(xpath = "//button[@id='email_quote']")
     private WebElement emailEstimateButton;
 
+    public void switchToFrame(String frameName) {
+        waitingForEvents.waitForAppearanceFrame(0);
+        driver.switchTo().frame(frameName);
+    }
+
     public void inputNumberOfInstances(String number) {
         numberOfInstances.sendKeys(number);
     }
@@ -61,7 +65,7 @@ public class PricingCalculatorPage extends BasePage {
     }
 
     public void clickSectionComputeEngine() {
-        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(sectionComputeEngine));
+        waitingForEvents.waitForAppearanceElement(sectionComputeEngine);
         sectionComputeEngine.click();
     }
 
@@ -76,8 +80,9 @@ public class PricingCalculatorPage extends BasePage {
 
     public void selectElementFromMenuOperatingSystemAndSoftware(String element) {
         menuOperatingSystemAndSoftware.click();
-        waitingForEvents.waitFor(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]")));
-        driver.findElement(By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]")).click();
+        By elementOperatingSystemLocatedBy = By.xpath("//md-content/md-option/div[contains (text(),'" +element+ "')]");
+        waitingForEvents.waitForAppearanceElementLocatedBy(elementOperatingSystemLocatedBy);
+        driver.findElement(elementOperatingSystemLocatedBy).click();
     }
 
     public void selectElementFromMenuMachineClass(String element) {
@@ -92,19 +97,19 @@ public class PricingCalculatorPage extends BasePage {
 
     public void selectElementFromMenuMachineType(String element) {
         machineType.click();
-        waitingForEvents.waitFor(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]")));
+        waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select-value[@id='select_value_label_60']//div[contains (text(), 'n1')]"));
         driver.findElement(By.xpath("//div[contains (text(),'" +element+ "')]")).click();
     }
 
     public void selectElementFromMenuNumberOfGPU() {
-        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(numberOfGPU));
+        waitingForEvents.waitForAppearanceElement(numberOfGPU);
         numberOfGPU.click();
         driver.findElement(By.cssSelector("#select_option_399 > div.md-text.ng-binding")).click();
     }
 
     public void selectElementFromMenuTypeGPU(String element) {
         typeGPU.click();
-        waitingForEvents.waitFor(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']")));
+        waitingForEvents.waitForAppearanceElementLocatedBy(By.xpath("//md-select[@id='select_396' and @aria-expanded='true']"));
         driver.findElement(By.xpath("//md-option//div[contains (text(),'" +element+ "')]")).click();
     }
 
@@ -115,8 +120,9 @@ public class PricingCalculatorPage extends BasePage {
 
     public void selectElementFromMenuDatacenterLocation(String element) {
         datacenterLocation.click();
-        waitingForEvents.waitFor(ExpectedConditions.presenceOfElementLocated(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]")));
-        driver.findElement(By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]")).click();
+        By elementDatacenterLocatedBy = By.xpath("//md-select-menu[@class='md-overflow']//div[contains (text(),'" +element+ "')]");
+        waitingForEvents.waitForAppearanceElementLocatedBy(elementDatacenterLocatedBy);
+        driver.findElement(elementDatacenterLocatedBy).click();
     }
 
     public void selectElementFromMenuCommitedUsage(String element) {

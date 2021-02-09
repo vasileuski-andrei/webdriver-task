@@ -6,7 +6,6 @@ import com.google.cloud.hardcore.page.TenMinutePage;
 import com.google.cloud.hardcore.page.UndefinedPage;
 import com.google.cloud.hardcore.waits.WaitingForEvents;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,11 +60,6 @@ public class NavigationService {
 
     public void pasteCopiedData(WebElement field) {
         field.sendKeys(Keys.LEFT_CONTROL + "v");
-    }
-
-    public void switchToFrame(String frameName) {
-        waitingForEvents.waitFor(ExpectedConditions.frameToBeAvailableAndSwitchToIt(0));
-        driver.switchTo().frame(frameName);
     }
 
 }

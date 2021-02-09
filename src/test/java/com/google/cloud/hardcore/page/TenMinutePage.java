@@ -16,12 +16,12 @@ public class TenMinutePage extends BasePage {
     private WebElement inboxLetter;
 
     public void copyEmailAddress() {
-        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(copiedEmailAddress));
+        waitingForEvents.waitForCondition(ExpectedConditions.visibilityOf(copiedEmailAddress));
         copiedEmailAddress.click();
     }
 
     public void waitForALetter() {
-        waitingForEvents.waitFor(ExpectedConditions.visibilityOf(inboxLetter));
+        waitingForEvents.waitForCondition(ExpectedConditions.visibilityOf(inboxLetter));
         inboxLetter.click();
     }
 

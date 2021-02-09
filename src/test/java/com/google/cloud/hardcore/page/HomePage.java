@@ -27,7 +27,7 @@ public class HomePage extends BasePage {
     }
 
     public void waitSearchResults() {
-        waitingForEvents.waitFor(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']")));
+        waitingForEvents.waitForCondition(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='gs-title']//b[text()='Google Cloud Platform Pricing Calculator']")));
     }
 
     public PricingCalculatorPage searchPricingCalculatorPage(String webPage) {

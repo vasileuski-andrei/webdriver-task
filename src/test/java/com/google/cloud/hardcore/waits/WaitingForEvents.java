@@ -1,7 +1,10 @@
 package com.google.cloud.hardcore.waits;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class WaitingForEvents {
@@ -13,9 +16,23 @@ public class WaitingForEvents {
         this.driver = driver;
     }
 
-    public void waitFor(ExpectedCondition condition) {
+    public void waitForCondition(ExpectedCondition condition) {
         new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(condition);
     }
+
+    public void waitForAppearanceElement(WebElement element) {
+        waitForCondition(ExpectedConditions.visibilityOf(element));
+    }
+
+    public void waitForAppearanceElementLocatedBy(By by) {
+        waitForCondition(ExpectedConditions.presenceOfElementLocated(by));
+    }
+
+    public void waitForAppearanceFrame(int frameLocator) {
+        waitForCondition(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameLocator));
+    }
+
+
 
 }
